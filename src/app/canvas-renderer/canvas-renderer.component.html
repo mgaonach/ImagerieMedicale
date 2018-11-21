@@ -1,0 +1,36 @@
+<!-- <div class="dropdown">
+  <button (click)="click()" class="dropbtn">Dropdown</button>
+  <div id="myDropdown" class="dropdown-content">
+    <a href="#" >Link 1</a>
+  </div>
+</div>  -->
+
+<div>
+  <label>Entrez le lien d'une image : </label>
+  <input type="text" id="testInput" #testInput>
+  <button (click)="getLink()">Cliquez ici</button>
+
+
+  <button (click)="download()">Téléchargez l'image</button>
+  
+  </div>
+
+<div>
+  <canvas id="canvas" #canvas width="auto" height="auto"></canvas>
+</div>
+
+
+<!-- <div class="container">
+  <div class="card">
+    <div class="card-header">
+      Firebase Cloud Storage & Angular 5
+    </div>
+    <div class="card-body">
+      <h5 class="card-title">Select a file for upload:</h5>
+      <input type="file" (change)="upload($event)" accept=".png,.jpg" />
+    </div>
+  </div>
+</div>
+<button (click)="downloadFireBase()">CLIQUEZ </button> -->
+
+<img [src]="profileUrl | async" />
