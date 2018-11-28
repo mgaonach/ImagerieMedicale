@@ -6,14 +6,19 @@
 </div>  -->
 
 <div>
-  <label>Entrez le lien d'une image : </label>
-  <input type="text" id="testInput" #testInput>
-  <button (click)="getLink()">Cliquez ici</button>
-  <button (click)="download()">Téléchargez l'image</button>
+  <label>Entrez le nom d'une image stockée dans firebase : </label>
+  <input type="text" id="imageNameInput" [(ngModel)]="imageName"/>
+  <button (click)="initNewImage()">Editer l'image</button>
+  <br/>
+  <button (click)="startAnalisis()">Détecter le texte</button>
+  <label>Confiance (%) : </label>
+  <input type="number" id="confidenceInput" min="1" max="100" [(ngModel)]="confidence"/>
+  <!-- <button (click)="download()">Téléchargez l'image</button> -->
 </div>
-
+<label>{{this.status}}</label>
+<progress id="analyse" name="analyse" max="1" [value]="progress"></progress>
 <div>
-  <canvas id="canvas" #canvas width="auto" height="auto"></canvas>
+  <canvas id="canvas" #canvas></canvas>
 </div>
 
 

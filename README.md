@@ -1,11 +1,28 @@
-# ImagerieMedicale
+# Projet ACDC - Imagerie médicale - Partie 2
 
-Bienvenue dans le projet Imagerie Medicale de Samy Le Galloudec.
+## Angular
 
-La première image d'affichée (un écureuil) est dans une balise img, et est récupérée depuis Firebase.
+Lancer le serveur de développement avec `ng serve`.
+Build : lancer `ng build`, avec l'option `--prod` pour la production.
 
-Pour dessiner sur une image, il faut insérer le lien d'une image dans l'input, ce qui va l'insérer dans un canvas.
+/!\ Ne fonctionne qu'en mode production pour le moment...
 
-Si jamais il manque la librairie angularfire, il faut l'installer avec la commande :
+## CORS
 
-$ npm i firebase angularfire2
+/!\ Pour que l'analyse automatique puisse fonctionner, il est nécessaire d'autoriser les CORS sur le stockage Firebase.
+
+Une méthode pour autoriser :
+- Télécharger **gsutil** : https://cloud.google.com/storage/docs/gsutil_install
+- Créer un fichier `cors.json` contenant les informations suivantes :
+```JSON
+[
+	{
+		"origin": ["*"],
+		"method": ["GET"],
+		"maxAgeSeconds": 3600
+	}
+]
+```
+*Vous pouvez remplacer `["*"]` par `["domaine_hebergement"]` pour restreindre l'accès à ce domaine uniquement.*
+- Une fois gsutil installé et configuré, lancer cette commande en remplacant `exampleproject.appspot.com` par le nom de votre bucket :
+`gsutil cors set cors.json gs://exampleproject.appspot.com`

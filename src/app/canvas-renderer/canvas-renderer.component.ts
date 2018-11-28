@@ -1,6 +1,6 @@
 import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { AngularFireStorage } from 'angularfire2/storage';
-import { Observable } from 'rxjs';
+import * as Tesseract from 'tesseract.js';
 
 
 @Component({
@@ -10,73 +10,97 @@ import { Observable } from 'rxjs';
 })
 export class CanvasRendererComponent implements OnInit {
 
-  @ViewChild('testInput') input: ElementRef;
-  @ViewChild('canvas') canvas: ElementRef;
+  @ViewChild('canvas') canvasRef: ElementRef;
+  private canvas: HTMLCanvasElement;
   @ViewChild('inputFire') inputFire: ElementRef;
 
-  private cx: CanvasRenderingContext2D;
+  private drawContext: CanvasRenderingContext2D;
   private lastX: number;
   private lastY: number;
   private currentX: number;
   private currentY: number;
   private drawing: boolean;
-  profileUrl: Observable<string | null>;
+  private link: string;
 
-  public shortLink = 'src/assets/';
+  private readonly minSize: number = 5;
 
-  private link:string;
+  progress: number = 0;
+  confidence: number = 60;
+  imageName: string = 'image4.jpg';
+  status: string = "idle";
 
-  constructor(private afStorage: AngularFireStorage) {
-    //Récupère l'image depuis firebase
-    let ref = this.afStorage.ref('image1.jpg');
-    this.profileUrl = ref.getDownloadURL();
-  }
+  constructor(private afStorage: AngularFireStorage) { }
 
   ngOnInit() {
   }
 
 
   ngAfterViewInit() {
-    this.cx = this.canvas.nativeElement.getContext("2d");
-    this.canvas.nativeElement.addEventListener('mousedown', this.onClick.bind(this));
-    this.canvas.nativeElement.addEventListener('mousemove', this.onMovement.bind(this));
-    this.canvas.nativeElement.addEventListener('mouseup', this.letItGo.bind(this));
+    this.canvas = <HTMLCanvasElement>this.canvasRef.nativeElement;
+    this.drawContext = this.canvas.getContext("2d");
+
+    this.canvas.addEventListener('mousedown', this.onClick.bind(this));
+    this.canvas.addEventListener('mousemove', this.onMovement.bind(this));
+    this.canvas.addEventListener('mouseup', this.letItGo.bind(this));
+
   }
 
-  //Récupère le lien de l'input
-  getLink() {
-    this.link = this.input.nativeElement.value;
-    let context: CanvasRenderingContext2D = this.canvas.nativeElement.getContext("2d");
-    this.createImage();
+  initNewImage() {
+    //Récupère l'image depuis firebase
+    let ref = this.afStorage.ref(this.imageName);
+    let profileUrl = ref.getDownloadURL();
+    profileUrl.subscribe((value) => {
+      console.log(value);
+      this.link = value;
+      this.createImage();
+    });
   }
 
   //Met une image récupérée par un lien en background d'un canvas
-  createImage() {
+  private createImage() {
     let img = new Image();
     img.src = this.link;
-    var width = img.naturalWidth;
-    var height = img.naturalHeight;
     img.onload = function () {
-      this.cx.drawImage(img, 0, 0, width, height);
-    }.bind(this)
-    this.canvas.nativeElement.width = width;
-    this.canvas.nativeElement.height = height;
+      this.canvasRef.width = img.width;
+      this.canvasRef.height = img.height;
+      this.canvas.width = img.width;
+      this.canvas.height = img.height;
+      this.drawContext.drawImage(img, 0, 0);
+    }.bind(this);
+  }
+
+  public startAnalisis() {
+    Tesseract.recognize(this.link)
+      .progress(message => {
+        if (message.progress == 1) {
+          this.status = "done";
+        } else {
+          this.status = message.status;
+        }
+        this.progress = message.progress;
+      })
+      .catch(err => console.error(err))
+      .then(this.handleAnalisisResult.bind(this));
+  }
+
+  private handleAnalisisResult(result: Tesseract.Page) {
+    result.words.forEach(word => {
+      console.log(this.confidence);
+      if (word.confidence > this.confidence && word.bbox.x1 - word.bbox.x0 > this.minSize && word.bbox.y1 - word.bbox.y0 > this.minSize) {
+        this.draw(word.bbox.x0, word.bbox.y0, word.bbox.x1, word.bbox.y1);
+      }
+    });
   }
 
   //Dessine sur le canvas
   draw(lX, lY, cX, cY) {
+    this.drawContext.beginPath();
     var sizeX = cX - lX;
     var sizeY = cY - lY;
-
-    this.cx.fill();
-    this.cx.rect(lX, lY, sizeX, sizeY);
-    this.cx.strokeStyle = "#000";
-    this.cx.stroke();
-  }
-
-  click() {
-    console.log("hey");
-    document.getElementById("myDropdown").classList.toggle("show");
+    this.drawContext.rect(lX, lY, sizeX, sizeY);
+    this.drawContext.fillStyle = "black";
+    this.drawContext.fill();
+    this.drawContext.stroke();
   }
 
   //Méthode bindée avec l'évènement : clic sur la souris
@@ -88,7 +112,7 @@ export class CanvasRendererComponent implements OnInit {
       this.lastX = event.layerX - event.currentTarget.offsetLeft;
       this.lastY = event.layerY - event.currentTarget.offsetTop;
     }
-    this.cx.beginPath();
+    this.drawContext.beginPath();
     this.drawing = true;
 
   }

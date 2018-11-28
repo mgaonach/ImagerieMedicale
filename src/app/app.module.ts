@@ -6,6 +6,7 @@ import { AngularFireStorageModule } from 'angularfire2/storage';
 import { AppComponent } from './app.component';
 import { CanvasRendererComponent } from './canvas-renderer/canvas-renderer.component';
 import { FIREBASE_AUTH } from './firebase.config';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -15,7 +16,8 @@ import { FIREBASE_AUTH } from './firebase.config';
   imports: [
     BrowserModule,
     AngularFireModule.initializeApp(FIREBASE_AUTH),
-    AngularFireStorageModule
+    AngularFireStorageModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
