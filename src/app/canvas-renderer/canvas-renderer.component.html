@@ -9,11 +9,8 @@
   <label>Entrez le lien d'une image : </label>
   <input type="text" id="testInput" #testInput>
   <button (click)="getLink()">Cliquez ici</button>
-
-
   <button (click)="download()">Téléchargez l'image</button>
-  
-  </div>
+</div>
 
 <div>
   <canvas id="canvas" #canvas width="auto" height="auto"></canvas>
@@ -33,4 +30,4 @@
 </div>
 <button (click)="downloadFireBase()">CLIQUEZ </button> -->
 
-<img [src]="profileUrl | async" />
+<!-- <img [src]="profileUrl | async" /> -->

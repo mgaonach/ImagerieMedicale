@@ -5,22 +5,16 @@ import { AngularFireStorageModule } from 'angularfire2/storage';
 
 import { AppComponent } from './app.component';
 import { CanvasRendererComponent } from './canvas-renderer/canvas-renderer.component';
-import { FonctionnalitesComponent } from './fonctionnalites/fonctionnalites.component';
+import { FIREBASE_AUTH } from './firebase.config';
 
 @NgModule({
   declarations: [
     AppComponent,
-    CanvasRendererComponent,
-    FonctionnalitesComponent
+    CanvasRendererComponent
   ],
   imports: [
     BrowserModule,
-    AngularFireModule.initializeApp({
-      apiKey: "AIzaSyCftyGu09LoY8HxPE_eB6gpoPS9sn85x74",
-      authDomain: "images-603e8.firebaseapp.com",
-      storageBucket: "images-603e8.appspot.com",
-      projectId: "images-603e8>",
-    }),
+    AngularFireModule.initializeApp(FIREBASE_AUTH),
     AngularFireStorageModule
   ],
   providers: [],
