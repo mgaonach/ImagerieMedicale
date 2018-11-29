@@ -7,16 +7,20 @@
 
 <div>
   <label>Entrez le nom d'une image stockée dans firebase : </label>
-  <input type="text" id="imageNameInput" [(ngModel)]="imageName"/>
+  <input type="text" id="imageNameInput" [(ngModel)]="imageName" />
   <button (click)="initNewImage()">Editer l'image</button>
-  <br/>
-  <button (click)="startAnalisis()">Détecter le texte</button>
-  <label>Confiance (%) : </label>
-  <input type="number" id="confidenceInput" min="1" max="100" [(ngModel)]="confidence"/>
-  <!-- <button (click)="download()">Téléchargez l'image</button> -->
+  <div [class.hide]="!imageLoaded">
+    <button (click)="analize()">Détecter le texte</button>
+    <label>Confiance (%) : </label>
+    <input type="number" id="confidenceInput" min="1" max="100" [(ngModel)]="analyser.confidence" />
+    <div [class.hide]="!analyser.computing" [class.inline]="analyser.computing" class="spinner"></div>
+    <label [class.hide]="!analyser.computing">
+      {{this.analyser.status}}
+    </label>
+  </div>
 </div>
-<label>{{this.status}}</label>
-<progress id="analyse" name="analyse" max="1" [value]="progress"></progress>
+
+<!-- <progress id="analyse" name="analyse" max="1" [value]="analyser.progress"></progress> -->
 <div>
   <canvas id="canvas" #canvas></canvas>
 </div>

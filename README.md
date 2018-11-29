@@ -5,8 +5,6 @@
 Lancer le serveur de développement avec `ng serve`.
 Build : lancer `ng build`, avec l'option `--prod` pour la production.
 
-/!\ Ne fonctionne qu'en mode production pour le moment...
-
 ## CORS
 
 /!\ Pour que l'analyse automatique puisse fonctionner, il est nécessaire d'autoriser les CORS sur le stockage Firebase.

@@ -1,6 +1,7 @@
 import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { AngularFireStorage } from 'angularfire2/storage';
 import * as Tesseract from 'tesseract.js';
+import { Analyzer } from '../analyzer/analyzer';
 
 
 @Component({
@@ -22,12 +23,9 @@ export class CanvasRendererComponent implements OnInit {
   private drawing: boolean;
   private link: string;
 
-  private readonly minSize: number = 5;
-
-  progress: number = 0;
-  confidence: number = 60;
+  analyser: Analyzer = new Analyzer();
   imageName: string = 'image4.jpg';
-  status: string = "idle";
+  imageLoaded:boolean = false;
 
   constructor(private afStorage: AngularFireStorage) { }
 
@@ -66,30 +64,16 @@ export class CanvasRendererComponent implements OnInit {
       this.canvas.width = img.width;
       this.canvas.height = img.height;
       this.drawContext.drawImage(img, 0, 0);
+      this.imageLoaded = true;
     }.bind(this);
   }
 
-  public startAnalisis() {
-    Tesseract.recognize(this.link)
-      .progress(message => {
-        if (message.progress == 1) {
-          this.status = "done";
-        } else {
-          this.status = message.status;
-        }
-        this.progress = message.progress;
-      })
-      .catch(err => console.error(err))
-      .then(this.handleAnalisisResult.bind(this));
-  }
-
-  private handleAnalisisResult(result: Tesseract.Page) {
-    result.words.forEach(word => {
-      console.log(this.confidence);
-      if (word.confidence > this.confidence && word.bbox.x1 - word.bbox.x0 > this.minSize && word.bbox.y1 - word.bbox.y0 > this.minSize) {
-        this.draw(word.bbox.x0, word.bbox.y0, word.bbox.x1, word.bbox.y1);
-      }
-    });
+  public analize() {
+    this.analyser.startAnalisis(this.link, result => {
+      result.forEach(element => {
+        this.draw(element.x0, element.y0, element.x1, element.y1);
+      });
+    })
   }
 
   //Dessine sur le canvas
@@ -98,7 +82,7 @@ export class CanvasRendererComponent implements OnInit {
     var sizeX = cX - lX;
     var sizeY = cY - lY;
     this.drawContext.rect(lX, lY, sizeX, sizeY);
-    this.drawContext.fillStyle = "black";
+    this.drawContext.fillStyle = "red";
     this.drawContext.fill();
     this.drawContext.stroke();
   }
@@ -112,9 +96,7 @@ export class CanvasRendererComponent implements OnInit {
       this.lastX = event.layerX - event.currentTarget.offsetLeft;
       this.lastY = event.layerY - event.currentTarget.offsetTop;
     }
-    this.drawContext.beginPath();
     this.drawing = true;
-
   }
 
 
@@ -129,7 +111,6 @@ export class CanvasRendererComponent implements OnInit {
         this.currentY = event.layerY - event.currentTarget.offsetTop;
       }
       this.draw(this.lastX, this.lastY, this.currentX, this.currentY);
-
     }
   }
 
