@@ -1,0 +1,4 @@
+Projet ACDC - Image médicale - GAONACH Maël
+
+----LOG 8 (28/11/2018)----
+Recherches et premier jet de l'analyse automatique
