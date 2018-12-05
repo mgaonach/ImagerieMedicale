@@ -1,6 +1,5 @@
 import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { AngularFireStorage } from 'angularfire2/storage';
-import * as Tesseract from 'tesseract.js';
 import { Analyzer } from '../analyzer/analyzer';
 
 
@@ -114,7 +113,7 @@ export class CanvasRendererComponent implements OnInit {
     }
   }
 
-  letItGo(event) { //bindée à l'event : relâchement du clic
+  letItGo() { //bindée à l'event : relâchement du clic
     this.drawing = false;
   }
 
