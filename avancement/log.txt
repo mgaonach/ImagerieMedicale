@@ -5,3 +5,12 @@ Recherches et premier jet de l'analyse automatique
 
 ----LOG 9 (05/12/2018)----
 Analyse automatique - WIP
+
+----LOG 10 (12/12/2018)----
+Test avec des images médicales
+
+----LOG 11 (19/12/2018)----
+Pas d'avancement cette semaine
+
+----LOG 12 (26/12/2018)----
+Pas d'avancement cette semaine
