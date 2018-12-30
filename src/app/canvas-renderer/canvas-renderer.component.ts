@@ -23,7 +23,7 @@ export class CanvasRendererComponent implements OnInit {
   private link: string;
 
   analyser: Analyzer = new Analyzer();
-  imageName: string = 'image4.jpg';
+  imageName: string = '';
   imageLoaded:boolean = false;
 
   constructor(private afStorage: AngularFireStorage) { }

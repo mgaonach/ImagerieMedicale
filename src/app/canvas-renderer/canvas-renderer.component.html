@@ -1,42 +1,49 @@
-<!-- <div class="dropdown">
-  <button (click)="click()" class="dropbtn">Dropdown</button>
-  <div id="myDropdown" class="dropdown-content">
-    <a href="#" >Link 1</a>
-  </div>
-</div>  -->
+<div class="row">
 
-<div>
-  <label>Entrez le nom d'une image stockée dans firebase : </label>
-  <input type="text" id="imageNameInput" [(ngModel)]="imageName" />
-  <button (click)="initNewImage()">Editer l'image</button>
-  <div [class.hide]="!imageLoaded">
-    <button (click)="analize()">Détecter le texte</button>
-    <label>Confiance (%) : </label>
-    <input type="number" id="confidenceInput" min="1" max="100" [(ngModel)]="analyser.confidence" />
-    <div [class.hide]="!analyser.computing" [class.inline]="analyser.computing" class="spinner"></div>
-    <label [class.hide]="!analyser.computing">
-      {{this.analyser.status}}
-    </label>
+  <div class="col">
+    <input [(ngModel)]="imageName" type="text" class="form-control" placeholder="Nom de l'image dans Firebase"
+      aria-label="Nom de l'image dans Firebase">
+  </div>
+  <div class="col">
+    <button (click)="initNewImage()" class="btn btn-secondary">Editer l'image</button>
+  </div>
+
+</div>
+
+<div class="row">
+  <div class="col">
+    <p>Ex : S_02212012113833_00000000U2173433_1_017_LMB.BMP</p>
   </div>
 </div>
 
-<!-- <progress id="analyse" name="analyse" max="1" [value]="analyser.progress"></progress> -->
-<div>
-  <canvas id="canvas" #canvas></canvas>
-</div>
+<div [class.hide]="!imageLoaded" class="row mt-5">
 
+  <div class="col">
 
-<!-- <div class="container">
-  <div class="card">
-    <div class="card-header">
-      Firebase Cloud Storage & Angular 5
+    <div class="card">
+
+      <div class="card-header">
+        <div class="form-inline">
+          <button class="btn btn-outline-secondary mr-1" (click)="analize()">Détecter le texte</button>
+          <label class="mr-1">Confiance minimum (%) : </label>
+          <input type="number" class="form-control mr-1" min="1" max="100" [(ngModel)]="analyser.confidence" />
+          <label class="mr-1">Taille minimum (px) : </label>
+          <input type="number" class="form-control mr-1" min="1" [(ngModel)]="analyser.minSize" />
+          <div class="row" [class.hide]="!analyser.computing">
+            <div class="col">
+              <div class="spinner-border spinner-border-sm" role="status"></div>
+            </div>
+            <p>{{this.analyser.status}}</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-body" style="overflow:scroll">
+        <canvas id="canvas" #canvas></canvas>
+      </div>
+
     </div>
-    <div class="card-body">
-      <h5 class="card-title">Select a file for upload:</h5>
-      <input type="file" (change)="upload($event)" accept=".png,.jpg" />
-    </div>
-  </div>
-</div>
-<button (click)="downloadFireBase()">CLIQUEZ </button> -->
 
-<!-- <img [src]="profileUrl | async" /> -->
+  </div>
+
+</div>

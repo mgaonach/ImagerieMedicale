@@ -6,11 +6,10 @@ export class Analyzer {
   tesseract: Tesseract.TesseractStatic = Tesseract.create(TESSERACT_PARAMETERS);
 
   private _progress: number = 0;
-  private _confidence: number = 60;
+  private _confidence: number = 70;
   private _status: string = "idle";
   private _computing: boolean = false;
-
-  private readonly minSize: number = 5;
+  private _minSize:number = 10;
 
   constructor() { }
 
@@ -34,6 +33,14 @@ export class Analyzer {
     return this._computing;
   }
 
+  public get minSize():number{
+    return this._minSize;
+  }
+
+  public set minSize(value:number){
+    this._minSize = value;
+  }
+
   public startAnalisis(url: string, resultAction: (results: { x0: number, y0: number, x1: number, y1: number }[]) => void) {
     this._computing = true;
     this._status = "loading";
@@ -51,7 +58,7 @@ export class Analyzer {
       .then((result) => {
         let res: { x0: number, y0: number, x1: number, y1: number }[] = new Array();
         result.words.forEach(element => {
-          if (element.confidence >= this._confidence && element.bbox.x1 - element.bbox.x0 > this.minSize && element.bbox.y1 - element.bbox.y0 > this.minSize) {
+          if (element.confidence >= this._confidence && element.bbox.x1 - element.bbox.x0 > this._minSize && element.bbox.y1 - element.bbox.y0 > this._minSize) {
             res.push({ x0: element.bbox.x0, y0: element.bbox.y0, x1: element.bbox.x1, y1: element.bbox.y1 });
           }
         });

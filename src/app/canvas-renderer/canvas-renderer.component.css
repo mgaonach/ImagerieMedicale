@@ -3,30 +3,5 @@
 .hide {display:none;}
 .inline {display: inline-block;}
 
-@keyframes spin {
-  0%{
-    transform: rotate(0deg);
-  }
-  50% {
-    transform: rotate(360deg);
-  }
-  100% {
-    transform: rotate(720deg);
-  }
-}
-
-.spinner {
-    border: 2px solid transparent;
-    border-top: 2px solid rgba(0,0,0,0.7);
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    animation-name: spin;
-    animation-duration: 2s;
-    animation-timing-function: ease;
-    animation-iteration-count: infinite;
-    margin-left: 5px; 
-    margin-right: 5px; 
-}
 
   
