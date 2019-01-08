@@ -12,5 +12,5 @@ Test avec des images médicales
 ----LOG 11 (19/12/2018)----
 Pas d'avancement cette semaine
 
-----LOG 12 (26/12/2018)----
-Pas d'avancement cette semaine
+----LOG 12 (28/12/2018)----
+Travail sur l'interface
