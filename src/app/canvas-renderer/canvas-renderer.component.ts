@@ -81,7 +81,7 @@ export class CanvasRendererComponent implements OnInit {
     var sizeX = cX - lX;
     var sizeY = cY - lY;
     this.drawContext.rect(lX, lY, sizeX, sizeY);
-    this.drawContext.fillStyle = "red";
+    this.drawContext.fillStyle = "black";
     this.drawContext.fill();
     this.drawContext.stroke();
   }
